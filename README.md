@@ -40,4 +40,13 @@ Groups (up to group isomorphism) ARE a database table
   - FK to `Nat` (carrier type)
   - FK `mul` to `ID` of `Nat x Nat -> Nat`
   - FK `unit` to `Nat`
-  - Furthermore, the group axioms need to hold: - `forall x y in G: `
+  - Furthermore, the group axioms need to hold:
+    - `∀ x, y, z G: (xy)z=x(yz)`
+    - `∀ x, y ϵ G: x(x⁻¹)=e`
+    - `∀ x ϵ G: xe=x=ex`
+
+# Sources
+
+- http://web.mit.edu/jgross/Public/tmp/doc/sphinx/_build/html/language/cic.html
+- http://www4.di.uminho.pt/~mjf/pub/SFV-CIC-2up.pdf
+- https://crypto.stanford.edu/~blynn/lambda/pts.html

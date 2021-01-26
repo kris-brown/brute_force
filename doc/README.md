@@ -7,7 +7,10 @@
 
 -->
 
-
+$@
+\usepackage{amssymb}
+\renewcommand{\vector}[1]{(x_1,x_2,\ldots,x_{#1})}
+$@
 
 # brute_force
 
@@ -18,7 +21,7 @@ examples look like (e.g. the smallest adjunctions).
 
 Examples:
 
-"For all groups G (up to order n), and for all x and y in G, is it the case that ![(xy)^-1 = y^-1x^-1?](doc/teximg/tex_img_0_C134Z.png)"
+"For all groups G (up to order n), and for all x and y in G, is it the case that $(xy)^-1 = y^-1x^-1?$"
 
 "Show me (and store in a database) the 5 smallest natural transformations"
 
@@ -31,9 +34,9 @@ The language being used is the calculus of inductive constructions https://hal.i
 (from nlab) Terms of a pure type system can be:
 
 - Variables or constants
-- abstraction (![\lambda x: A, B](doc/teximg/tex_img_1_O42U7.png))
-- dependent product (![\Pi t: A, B](doc/teximg/tex_img_2_NW0ZM.png))
-- application (![f(x)](doc/teximg/tex_img_3_9TA1E.png))
+- abstraction (`λ x: A, B`)
+- dependent product (`Π t: A, B`)
+- application ($f(x)$)
 
 Each table has a hidden primary key that is computed as a hash of the unique information.
 
@@ -42,6 +45,8 @@ Each table has a hidden primary key that is computed as a hash of the unique inf
 - pairs of natural numbers are a database table (FKs `fst` and `snd` to `Nat` and unique constraint on `(fst, snd)`), where each row is an instance.
 
 - The type `Nat -> Nat` is a database table (`ID`, FK `dom` to `Nat`, FK `codom` to `Nat`, unique constraint on `(ID, dom)`) representing unary functions on `Nat` where each subset of rows with a given ID is an instance.
+
+- The type `Pi b:Bool, if b then Nat else Bool` is a database table (`ID`, FK `dom` to `Bool`, FK `codom` to `match b with tt=> Nat, ff=> Bool`, unique constraint on `(ID, dom)`).
 
 - The type `Nat x Nat -> Nat` is a database table (`ID`, FK `dom` to `ID` of `Nat x Nat` and FK `codom` to `Nat`, unique constraint on `(ID, dom)`) representing binary functions on `Nat` where each subset of rows with a given ID is an instance.
 
@@ -52,9 +57,16 @@ Each table has a hidden primary key that is computed as a hash of the unique inf
 - FK `mul` to `ID` of `Nat x Nat -> Nat`
 - FK `unit` to `Nat`
 - Furthermore, the group axioms need to hold:
+
   - `∀ x, y, z G: (xy)z=x(yz)`
   - `∀ x, y ϵ G: x(x⁻¹)=e`
   - `∀ x ϵ G: xe=x=ex`
+
+-
+
+# TO DO
+
+- When a table is 'complete', we need to run `REVOKE UPDATE ON TABLE ??? FROM CURRENT_USER;`
 
 # Sources
 

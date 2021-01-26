@@ -1,79 +1,54 @@
-# from db import create_int, ConnectInfo
+from typing import List as L, Tuple as T
+from term import Term
+from base import base
+from abc import ABCMeta, abstractmethod, abstractproperty, abstractstaticmethod, abstractclassmethod
+from dataclasses import dataclass
 
-import sys
-from lark import Lark
-from lark.reconstruct import Reconstructor
+
+# def to_tables(t: Term) -> T[str, Table]:
+#     keys = ','.join(["'%s'" % d for d in t.decls.keys()])
+#     create = f"CREATE TYPE {t.name}_con AS ENUM ({keys});"
+#     breakpoint()
+#     raise NotImplementedError
+#     return create, Table(t.name, '', fks)
 
 
-grammar = r"""
-    ?start: defs
+class DBT(metaclass=ABCMeta):
+    """
+    Any CLOSED term must have a corresponding table
 
-    defs : def*
+    Except for kinds (Set/Type/Prop) which we don't want tables for.
 
-    def : "Inductive" CNAME typed* ":" term ":=" icon* "."
+    Lam(x: )
+    """
 
-    icon : "|" CNAME ("("term")" | typed)* ":" term
+    t: Term
 
-    ?term:
-     | sort
-     | lam
-     | pi
-     | arr
-     | app
-     | match
-     | "(" term ")"
-     | var
+    def __post_init__(self) -> None:
+        assert self.t.freevars() == set()  # closed
 
-    sort :
-     | "Set" -> set
-     | "Prop" -> prop
-     | ("Type" [INT]) -> type
+    @abstractproperty
+    def name(self) -> str:
+        raise NotImplementedError
 
-    var : CNAME
-    lam : ("λ"|"fun") typed* "=>" term
-    arr:  term (("->" | "→") term)*
-    pi : ("∀"|"Π") typed* "," term
-    typed : "(" var ":" term ")"
-    app : term*
-    match : "match" term "with" matchcase* "."
-    matchcase : "|" term "=>" term
-    %import common.WS
-    %import common.INT
-    %import common.CNAME
 
-    %ignore WS
-"""
-parser = Lark(grammar)
+@dataclass(order=True, frozen=True)
+class DBItype(DBT):
+    t: Term
 
-s = '''Inductive vector(A: Type): (Nat) → (Type) :=
-    | Vnil: (vector A zero)
-    | Vcons(a: A)(n: Nat) (vector A n): (vector A(succ n)) .
-'''
-tree = parser.parse(s)
-rec = Reconstructor(parser).reconstruct(tree)
-print(tree, rec, sep='\n')
+    @property
+    def name(self) -> str:
+        x = self.t.__str__()
+        reveal_type(x)
+        return x
 
-sys.exit()
 
-for s in ["Set", " Prop", "Type ", " Type 2 ", "Type30", "x", "_y1",
-          "λ (x:Set) (y:Prop) => Type", "fun (_x: A) => _x",
-          "∀ (x:Set) (y:Prop), Type", "Π (_x: A), _x", "x y",
-          "x Set", "(fun (_x: A) => _x) Prop",
-          """match F x y with
-           | Zero => F x Zero
-           | S z => G z z.""", "A -> B", "A -> B -> C -> D"]:
-    tree = parser.parse(s)
-    rec = Reconstructor(parser).reconstruct(tree)
-    print(tree)
-    # if '30' in s:
-    #     breakpoint()
-    assert rec == Reconstructor(parser).reconstruct(parser.parse(rec))
-
-# def main() -> None:
+def main() -> None:
+    pass
 #     ci = ConnectInfo()
 #     conn = ci.connect()
 #     create_int(conn)
 
 
-# if __name__ == '__main__':
-#     main()
+if __name__ == '__main__':
+    main()

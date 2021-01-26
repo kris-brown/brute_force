@@ -1,0 +1,12 @@
+cradle:
+  multi:
+    - path: "../../calculus_of_constructions/haskell/"
+      config:
+        cradle:
+          stack:
+            stackYaml: "stack.yaml"
+    - path: "./"
+      config:
+        cradle:
+          stack:
+            stackYaml: "stack.yaml"

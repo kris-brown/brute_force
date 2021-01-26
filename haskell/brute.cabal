@@ -1,0 +1,71 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 0d51485ba4e8caaebcd2464520e22064df4a39ae345a4fb8206b5ff6c04741d1
+
+name:           brute
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/githubuser/brute#readme>
+homepage:       https://github.com/githubuser/brute#readme
+bug-reports:    https://github.com/githubuser/brute/issues
+author:         Author name here
+maintainer:     example@example.com
+copyright:      2021 Author name here
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/githubuser/brute
+
+library
+  exposed-modules:
+      Lib DB Gen
+  other-modules:
+      Paths_brute
+  hs-source-dirs:
+      src
+  build-depends:
+      base >=4.7 && <5,
+      coc,
+      text,
+      containers,
+      postgresql-simple,
+      mtl
+  default-language: Haskell2010
+  default-extensions: OverloadedStrings LambdaCase
+  ghc-options: -Wall -Werror
+
+executable brute
+  main-is: Main.hs
+  other-modules:
+      Paths_brute
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N -Wall -Werror
+  build-depends:
+      base >=4.7 && <5
+    , brute
+  default-language: Haskell2010
+  default-extensions: OverloadedStrings LambdaCase
+
+test-suite brute-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_brute
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , brute
+  default-language: Haskell2010
+  default-extensions: OverloadedStrings LambdaCase

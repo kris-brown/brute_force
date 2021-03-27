@@ -49,7 +49,7 @@ size = \case
 
 -- SQL to insert a term if possible
 insert :: TypeChecker -> Term -> String
-insert tc t = insertTemplate tn ("size" : cols) (show (size t) : vals)
+insert tc t = insertTemplate tn ("id" : hash t) ("size" : cols) (show (size t) : vals)
   where
     tab = toTab tc (judge tc t)
     tn = tabName tc tab

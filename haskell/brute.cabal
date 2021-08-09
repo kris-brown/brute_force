@@ -27,7 +27,7 @@ source-repository head
 
 library
   exposed-modules:
-      DB Basic
+      DB Basic Attempt
   other-modules:
       Paths_brute
   hs-source-dirs:
